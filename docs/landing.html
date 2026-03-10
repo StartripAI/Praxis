@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Praxis — Operating Intelligence Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --text:#1d1d1f;--text-secondary:#6e6e73;--bg:#fff;--bg-secondary:#f5f5f7;
+  --accent:#0071e3;--accent-hover:#0077ED;
+  --border:rgba(0,0,0,0.08);--card-bg:#fff;--card-shadow:0 2px 12px rgba(0,0,0,0.06);
+  --max-w:980px;--section-gap:clamp(100px,14vh,160px);
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.47;overflow-x:hidden}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.82);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--border);transition:transform .35s}
+.nav-in{max-width:var(--max-w);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 22px;height:44px}
+.nav-logo{font-weight:700;font-size:17px;color:var(--text);letter-spacing:-.3px;text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:12px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.lang-btn{background:none;border:1px solid var(--border);border-radius:980px;padding:3px 12px;font-size:11px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:all .2s;font-family:inherit}
+.lang-btn:hover{border-color:var(--text-secondary);color:var(--text)}
+.nav-gh{background:var(--accent);color:#fff!important;padding:4px 14px;border-radius:980px;font-size:11px!important;font-weight:600!important;transition:background .2s}
+.nav-gh:hover{background:var(--accent-hover)}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 24px 80px}
+.hero-overline{font-size:17px;font-weight:600;color:var(--accent);margin-bottom:16px;opacity:0;animation:up .8s .1s forwards}
+.hero h1{font-size:clamp(44px,7vw,80px);font-weight:700;letter-spacing:-2.5px;line-height:1.05;color:var(--text);margin-bottom:12px;opacity:0;animation:up .8s .25s forwards;max-width:780px}
+.hero-sub{font-size:clamp(17px,2.2vw,21px);color:var(--text-secondary);max-width:560px;line-height:1.4;font-weight:400;margin-bottom:40px;opacity:0;animation:up .8s .4s forwards}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;opacity:0;animation:up .8s .55s forwards}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border-radius:980px;font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;transition:all .25s;border:none;font-family:inherit}
+.btn-filled{background:var(--accent);color:#fff}.btn-filled:hover{background:var(--accent-hover)}
+.btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}.btn-outline:hover{background:rgba(0,113,227,.06)}
+
+/* Sections */
+section{padding:var(--section-gap) 24px}
+.sec-in{max-width:var(--max-w);margin:0 auto}
+.sec-label{font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.sec-title{font-size:clamp(32px,4.5vw,48px);font-weight:700;letter-spacing:-1.5px;line-height:1.08;margin-bottom:10px;color:var(--text)}
+.sec-desc{font-size:clamp(15px,1.8vw,19px);color:var(--text-secondary);max-width:580px;line-height:1.45;margin-bottom:48px}
+.sec-alt{background:var(--bg-secondary)}
+
+/* Pain points */
+.pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.pain{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:28px 24px;transition:box-shadow .3s,transform .3s}
+.pain:hover{box-shadow:var(--card-shadow);transform:translateY(-3px)}
+.pain-num{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.pain h3{font-size:16px;font-weight:700;margin-bottom:6px;line-height:1.25}
+.pain p{font-size:14px;color:var(--text-secondary);line-height:1.45}
+
+/* Architecture */
+.arch{text-align:center}
+.arch-diagram{max-width:640px;margin:0 auto;font-family:'SF Mono','Fira Code',monospace;font-size:13px;line-height:1.9;background:var(--bg-secondary);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:left;color:var(--text-secondary)}
+.arch-diagram .layer-label{color:var(--text);font-weight:700;font-family:'Inter',sans-serif}
+.arch-highlight{color:var(--accent);font-weight:600}
+
+/* Comparison */
+.cmp table{width:100%;border-collapse:collapse;font-size:14px;background:var(--card-bg);border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.cmp th{padding:14px 16px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);background:var(--bg-secondary);border-bottom:1px solid var(--border)}
+.cmp td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-secondary)}
+.cmp tr:last-child td{border-bottom:none}
+.cmp td:first-child{color:var(--text);font-weight:600}
+.cmp .y{color:#34c759;font-weight:700}
+.cmp .n{color:#ff3b30}
+.cmp .p{color:#ff9500}
+.cmp .hi{background:rgba(0,113,227,.04)}
+.cmp th.hi{color:var(--accent)}
+
+/* Industries */
+.ind-center{text-align:center}
+.pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.pill{padding:10px 22px;border-radius:980px;font-size:14px;font-weight:500;background:var(--bg);border:1px solid var(--border);transition:all .25s;cursor:default}
+.pill:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 3px rgba(0,113,227,.08)}
+
+/* Code */
+.code-sec{text-align:center}
+pre.code{max-width:620px;margin:0 auto;text-align:left;background:var(--bg-secondary);border:1px solid var(--border);border-radius:16px;padding:28px 32px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--text-secondary)}
+pre.code .cm{color:#a8a8ac}
+pre.code .kw{color:#9d4edd}
+pre.code .fn{color:var(--accent)}
+pre.code .st{color:#34c759}
+pre.code .nu{color:#ff9500}
+
+/* CTA */
+.cta{text-align:center;padding:120px 24px 140px}
+.cta h2{font-size:clamp(36px,5.5vw,56px);font-weight:700;letter-spacing:-2px;margin-bottom:16px}
+.cta-install{display:inline-block;background:var(--bg-secondary);border:1px solid var(--border);padding:14px 28px;border-radius:12px;font-family:'SF Mono',monospace;font-size:16px;font-weight:500;color:var(--text);margin-bottom:24px}
+.cta p{color:var(--text-secondary);font-size:17px;margin-bottom:32px}
+
+footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border);color:var(--text-secondary);font-size:12px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* Animations */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}.rv.vis{opacity:1;transform:translateY(0)}
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:700px){.nav-links a:not(.nav-gh):not(.lang-btn){display:none}.pain-grid{grid-template-columns:1fr}.cmp{overflow-x:auto}pre.code{font-size:11px;padding:20px 16px}}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-in">
+  <a href="#" class="nav-logo">Praxis</a>
+  <div class="nav-links">
+    <a href="#problems" data-i="nav_problems">Problems</a>
+    <a href="#arch" data-i="nav_arch">Architecture</a>
+    <a href="#compare" data-i="nav_compare">Compare</a>
+    <a href="https://github.com/StartripAI/Praxis/blob/main/docs/QUICKSTART.md" target="_blank" data-i="nav_docs">Docs</a>
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">中文</button>
+    <a href="https://github.com/StartripAI/Praxis" target="_blank" class="nav-gh">GitHub ↗</a>
+  </div>
+</div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <p class="hero-overline" data-i="hero_overline">Open Source · Apache-2.0 · Python</p>
+  <h1 data-i="hero_title">The last mile of business operations.</h1>
+  <p class="hero-sub" data-i="hero_sub">Calendar alignment, data governance, growth decomposition, conformal uncertainty, backtest verification — one engine for all industries.</p>
+  <div class="hero-actions">
+    <a href="https://github.com/StartripAI/Praxis" target="_blank" class="btn btn-filled" data-i="hero_cta1">View on GitHub</a>
+    <a href="#code" class="btn btn-outline" data-i="hero_cta2">Quick Start →</a>
+  </div>
+</section>
+
+<!-- Problems -->
+<section id="problems" class="sec-alt">
+<div class="sec-in">
+  <p class="sec-label rv" data-i="prob_label">The Problem</p>
+  <h2 class="sec-title rv" data-i="prob_title">Models are the easy part.</h2>
+  <p class="sec-desc rv" data-i="prob_desc">Prediction libraries give you a model. Nobody gives you what your CFO, COO, and ops team actually need — the infrastructure around it.</p>
+  <div class="pain-grid">
+    <div class="pain rv">
+      <p class="pain-num">01</p>
+      <h3 data-i="p1_title">Data ingestion hell</h3>
+      <p data-i="p1_desc">Data scattered across Excel, Feishu, and 5 different systems. No single truth store.</p>
+    </div>
+    <div class="pain rv">
+      <p class="pain-num">02</p>
+      <h3 data-i="p2_title">Inconsistent calibers</h3>
+      <p data-i="p2_desc">Every report calculates metrics differently. No versioned definitions, no governance.</p>
+    </div>
+    <div class="pain rv">
+      <p class="pain-num">03</p>
+      <h3 data-i="p3_title">Calendar misalignment</h3>
+      <p data-i="p3_desc">March 1 was Saturday last year, Sunday this year. Raw YoY comparison shows ±30% bias from calendar effects alone.</p>
+    </div>
+    <div class="pain rv">
+      <p class="pain-num">04</p>
+      <h3 data-i="p4_title">Hardcoded event effects</h3>
+      <p data-i="p4_desc">HOLIDAY_COEFFICIENT = 0.85 — somebody guessed this once. Nobody knows if it's still right.</p>
+    </div>
+    <div class="pain rv">
+      <p class="pain-num">05</p>
+      <h3 data-i="p5_title">Single-number forecasts</h3>
+      <p data-i="p5_desc">Management treats predictions as certainty. No range, no risk communication, no confidence intervals.</p>
+    </div>
+    <div class="pain rv">
+      <p class="pain-num">06</p>
+      <h3 data-i="p6_title">No verification culture</h3>
+      <p data-i="p6_desc">"Looks about right" is not validation. No backtest, no gate, no pass/fail threshold.</p>
+    </div>
+    <div class="pain rv">
+      <p class="pain-num">07</p>
+      <h3 data-i="p7_title">Growth is a black box</h3>
+      <p data-i="p7_desc">"Revenue went up" — but is it YoY? MoM? New stores inflating? Nobody decomposes it.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Architecture -->
+<section id="arch" class="arch">
+<div class="sec-in">
+  <p class="sec-label rv" data-i="arch_label">Architecture</p>
+  <h2 class="sec-title rv" style="text-align:center" data-i="arch_title">Thin wrapper. Heavy leverage.</h2>
+  <p class="sec-desc rv" style="text-align:center;margin-inline:auto" data-i="arch_desc">Praxis only builds the top two layers — business abstraction and adapters. Core algorithms are delegated to proven open-source backends, reducing effort by 60%+.</p>
+  <div class="arch-diagram rv">
+<span class="layer-label arch-highlight">Praxis — Business Abstraction</span>
+  DM Mapping · Growth Decomp · Backtest Gate
+  Event Learner · DOW Learner · Report Output
+──────────────────────────────────────
+<span class="layer-label arch-highlight">Praxis — Thin Adapters</span>
+  forecast/ · conformal/ · features/
+──────────────────────────────────────
+<span class="layer-label">Open-source Backends (pip install)</span>
+  StatsForecast · Darts · MAPIE · tsfresh
+  chinese-calendar · holidays · AutoTS
+──────────────────────────────────────
+<span class="layer-label">Data Layer</span>
+  DuckDB (star schema) · BigQuery/Snowflake MCP
+  CSV · Excel · httpfs
+  </div>
+</div>
+</section>
+
+<!-- Code -->
+<section id="code" class="code-sec sec-alt">
+<div class="sec-in">
+  <p class="sec-label rv" data-i="code_label">Quick Start</p>
+  <h2 class="sec-title rv" style="text-align:center" data-i="code_title">One minute to learn.</h2>
+  <pre class="code rv">
+<span class="cm"># Install</span>
+pip install praxis-engine
+
+<span class="cm"># 1. Comparable trading days</span>
+<span class="kw">from</span> praxis.calendar <span class="kw">import</span> <span class="fn">CalendarEngine</span>
+engine = <span class="fn">CalendarEngine</span>(country=<span class="st">"CN"</span>, year=<span class="nu">2026</span>)
+dm = engine.<span class="fn">build_dm_mapping</span>(target_year=<span class="nu">2026</span>, target_month=<span class="nu">3</span>)
+
+<span class="cm"># 2. Growth decomposition</span>
+<span class="kw">from</span> praxis.analysis.growth <span class="kw">import</span> <span class="fn">GrowthDecomposer</span>
+g = <span class="fn">GrowthDecomposer</span>().<span class="fn">decompose</span>(<span class="nu">115000</span>, <span class="nu">100000</span>, <span class="nu">110000</span>)
+
+<span class="cm"># 3. Calibrated uncertainty (not a single number)</span>
+<span class="kw">from</span> praxis.forecast.conformal <span class="kw">import</span> <span class="fn">ConformalWrapper</span>
+cw = <span class="fn">ConformalWrapper</span>(quantiles=[<span class="nu">0.10</span>, <span class="nu">0.50</span>, <span class="nu">0.90</span>])
+
+<span class="cm"># 4. Pass or fail — no ambiguity</span>
+<span class="kw">from</span> praxis.backtest.scoring <span class="kw">import</span> <span class="fn">score</span>
+sc = <span class="fn">score</span>(actuals, preds, gate={<span class="st">"max_bias"</span>: <span class="nu">0.15</span>})
+  </pre>
+</div>
+</section>
+
+<!-- Compare -->
+<section id="compare">
+<div class="sec-in">
+  <p class="sec-label rv" data-i="cmp_label">Competitive Landscape</p>
+  <h2 class="sec-title rv" data-i="cmp_title">The intersection nobody occupies.</h2>
+  <p class="sec-desc rv" data-i="cmp_desc">BI tools visualize. Planning tools plan. Forecasting libraries model. Nobody does all three — plus governance.</p>
+  <div class="cmp rv">
+  <table>
+    <tr>
+      <th data-i="cmp_h_cap">Capability</th>
+      <th data-i="cmp_h_bi">BI Tools</th>
+      <th data-i="cmp_h_xpa">xP&A Platforms</th>
+      <th data-i="cmp_h_oss">OSS TS Libraries</th>
+      <th class="hi">Praxis</th>
+    </tr>
+    <tr><td data-i="cmp_r1">Calendar / Trading-Day Alignment</td><td class="n">✗</td><td class="p">⚠</td><td class="n">✗</td><td class="hi y">✓</td></tr>
+    <tr><td data-i="cmp_r2">Data Governance / Caliber</td><td class="p">⚠</td><td class="p">⚠</td><td class="n">✗</td><td class="hi y">✓</td></tr>
+    <tr><td data-i="cmp_r3">Growth Decomposition + Shrinkage</td><td class="n">✗</td><td class="p">⚠</td><td class="n">✗</td><td class="hi y">✓</td></tr>
+    <tr><td data-i="cmp_r4">Conformal P10/P50/P90</td><td class="n">✗</td><td class="n">✗</td><td class="p">⚠</td><td class="hi y">✓</td></tr>
+    <tr><td data-i="cmp_r5">Event Effect Auto-Learning</td><td class="n">✗</td><td class="n">✗</td><td class="p">⚠</td><td class="hi y">✓</td></tr>
+    <tr><td data-i="cmp_r6">Backtest Pass/Fail Gate</td><td class="n">✗</td><td class="n">✗</td><td class="p">⚠</td><td class="hi y">✓</td></tr>
+  </table>
+  </div>
+</div>
+</section>
+
+<!-- Industries -->
+<section class="sec-alt ind-center">
+<div class="sec-in">
+  <p class="sec-label rv" data-i="ind_label">Industries</p>
+  <h2 class="sec-title rv" style="text-align:center" data-i="ind_title">If you have daily data, Praxis works.</h2>
+  <div class="pills rv">
+    <span class="pill" data-i="ind_1">🛍️ Retail</span>
+    <span class="pill" data-i="ind_2">🍔 F&B</span>
+    <span class="pill" data-i="ind_3">💻 SaaS</span>
+    <span class="pill" data-i="ind_4">🚚 Logistics</span>
+    <span class="pill" data-i="ind_5">🏦 Finance</span>
+    <span class="pill" data-i="ind_6">🎓 Education</span>
+    <span class="pill" data-i="ind_7">🛒 E-commerce</span>
+    <span class="pill" data-i="ind_8">💈 Local Services</span>
+  </div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2 data-i="cta_title">Get started.</h2>
+  <div class="cta-install">pip install praxis-engine</div>
+  <p data-i="cta_desc">Open source. Apache-2.0. Free forever.</p>
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+    <a href="https://github.com/StartripAI/Praxis" target="_blank" class="btn btn-filled">GitHub</a>
+    <a href="https://github.com/StartripAI/Praxis/blob/main/docs/QUICKSTART.md" target="_blank" class="btn btn-outline" data-i="cta_docs">Documentation →</a>
+  </div>
+</section>
+
+<footer>
+  <p>Praxis — by <a href="https://github.com/StartripAI" target="_blank">StartripAI</a>. Apache-2.0.</p>
+</footer>
+
+<script>
+// i18n
+const T = {
+  en: {
+    nav_problems:"Problems", nav_arch:"Architecture", nav_compare:"Compare", nav_docs:"Docs",
+    hero_overline:"Open Source · Apache-2.0 · Python",
+    hero_title:"The last mile of business operations.",
+    hero_sub:"Calendar alignment, data governance, growth decomposition, conformal uncertainty, backtest verification — one engine for all industries.",
+    hero_cta1:"View on GitHub", hero_cta2:"Quick Start →",
+    prob_label:"The Problem", prob_title:"Models are the easy part.",
+    prob_desc:"Prediction libraries give you a model. Nobody gives you what your CFO, COO, and ops team actually need — the infrastructure around it.",
+    p1_title:"Data ingestion hell", p1_desc:"Data scattered across Excel, Feishu, and 5 different systems. No single truth store.",
+    p2_title:"Inconsistent calibers", p2_desc:"Every report calculates metrics differently. No versioned definitions, no governance.",
+    p3_title:"Calendar misalignment", p3_desc:"March 1 was Saturday last year, Sunday this year. Raw YoY comparison shows ±30% bias from calendar effects alone.",
+    p4_title:"Hardcoded event effects", p4_desc:"HOLIDAY_COEFFICIENT = 0.85 — somebody guessed this once. Nobody knows if it's still right.",
+    p5_title:"Single-number forecasts", p5_desc:"Management treats predictions as certainty. No range, no risk communication, no confidence intervals.",
+    p6_title:"No verification culture", p6_desc:'"Looks about right" is not validation. No backtest, no gate, no pass/fail threshold.',
+    p7_title:"Growth is a black box", p7_desc:'"Revenue went up" — but is it YoY? MoM? New stores inflating? Nobody decomposes it.',
+    arch_label:"Architecture", arch_title:"Thin wrapper. Heavy leverage.",
+    arch_desc:"Praxis only builds the top two layers — business abstraction and adapters. Core algorithms are delegated to proven open-source backends, reducing effort by 60%+.",
+    code_label:"Quick Start", code_title:"One minute to learn.",
+    cmp_label:"Competitive Landscape", cmp_title:"The intersection nobody occupies.",
+    cmp_desc:"BI tools visualize. Planning tools plan. Forecasting libraries model. Nobody does all three — plus governance.",
+    cmp_h_cap:"Capability", cmp_h_bi:"BI Tools", cmp_h_xpa:"xP&A Platforms", cmp_h_oss:"OSS TS Libraries",
+    cmp_r1:"Calendar / Trading-Day Alignment", cmp_r2:"Data Governance / Caliber", cmp_r3:"Growth Decomposition + Shrinkage",
+    cmp_r4:"Conformal P10/P50/P90", cmp_r5:"Event Effect Auto-Learning", cmp_r6:"Backtest Pass/Fail Gate",
+    ind_label:"Industries", ind_title:"If you have daily data, Praxis works.",
+    ind_1:"🛍️ Retail", ind_2:"🍔 F&B", ind_3:"💻 SaaS", ind_4:"🚚 Logistics",
+    ind_5:"🏦 Finance", ind_6:"🎓 Education", ind_7:"🛒 E-commerce", ind_8:"💈 Local Services",
+    cta_title:"Get started.", cta_desc:"Open source. Apache-2.0. Free forever.", cta_docs:"Documentation →",
+  },
+  zh: {
+    nav_problems:"痛点", nav_arch:"架构", nav_compare:"对比", nav_docs:"文档",
+    hero_overline:"开源 · Apache-2.0 · Python",
+    hero_title:"业务运营的最后一公里。",
+    hero_sub:"经营日对齐、数据口径治理、增长分解、校准不确定性、回测验收 — 一个引擎，所有行业。",
+    hero_cta1:"查看 GitHub", hero_cta2:"快速开始 →",
+    prob_label:"痛点", prob_title:"模型从来不是最大的坑。",
+    prob_desc:"预测库给你一个模型。但 CFO、运营总监和一线团队真正需要的 — 是模型之外的基础设施。",
+    p1_title:"数据接入地狱", p1_desc:"数据散在 Excel、飞书、5 个不同系统。没有统一事实层。",
+    p2_title:"口径不一致", p2_desc:"每份报表各算各的指标。没有版本化定义，没有治理。",
+    p3_title:"日历不可比", p3_desc:"去年3月1号是周六，今年是周日。原始同比直接偏30%，全是日历效应。",
+    p4_title:"事件效应硬编码", p4_desc:"HOLIDAY_COEFFICIENT = 0.85 — 当初谁猜的。现在还对吗？没人知道。",
+    p5_title:"预测只给一个数", p5_desc:"管理层把预测当确定值。没有范围、没有风险沟通、没有置信区间。",
+    p6_title:"没有验收文化", p6_desc:'"看着差不多就上了" 不是验证。没有回测、没有门槛、没有 pass/fail。',
+    p7_title:"增长是黑箱", p7_desc:'"营收涨了" — 但是同比涨？环比涨？新店虚高？没人拆得清。',
+    arch_label:"架构", arch_title:"薄封装，重复用。",
+    arch_desc:"Praxis 只构建顶部两层 — 业务抽象和适配器。核心算法委托给经过验证的开源后端，工作量减少 60%+。",
+    code_label:"快速开始", code_title:"一分钟上手。",
+    cmp_label:"竞品格局", cmp_title:"三条赛道的交汇点，没人占。",
+    cmp_desc:"BI 工具做可视化。规划平台做协作。预测库做模型。没有产品同时做这三件事 — 再加上治理。",
+    cmp_h_cap:"能力", cmp_h_bi:"BI 工具", cmp_h_xpa:"xP&A 平台", cmp_h_oss:"开源预测库",
+    cmp_r1:"经营日可比 / Trading-Day 对齐", cmp_r2:"数据口径治理", cmp_r3:"增长分解 + 贝叶斯收缩",
+    cmp_r4:"Conformal P10/P50/P90", cmp_r5:"事件效应自学习", cmp_r6:"回测验收 Pass/Fail",
+    ind_label:"适用行业", ind_title:"有日粒度数据，Praxis 就能用。",
+    ind_1:"🛍️ 零售", ind_2:"🍔 餐饮", ind_3:"💻 SaaS", ind_4:"🚚 物流",
+    ind_5:"🏦 金融", ind_6:"🎓 教育", ind_7:"🛒 电商", ind_8:"💈 本地生活",
+    cta_title:"立即开始。", cta_desc:"开源，Apache-2.0，永远免费。", cta_docs:"查看文档 →",
+  }
+};
+let curLang = navigator.language?.startsWith('zh') ? 'zh' : 'en';
+
+function applyLang(lang) {
+  curLang = lang;
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+  document.getElementById('langBtn').textContent = lang === 'zh' ? 'EN' : '中文';
+  const dict = T[lang];
+  document.querySelectorAll('[data-i]').forEach(el => {
+    const k = el.getAttribute('data-i');
+    if (dict[k]) el.textContent = dict[k];
+  });
+}
+function toggleLang() { applyLang(curLang === 'en' ? 'zh' : 'en'); }
+applyLang(curLang);
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+// Nav hide on scroll down
+let lastY = 0;
+window.addEventListener('scroll', () => {
+  const y = window.pageYOffset;
+  document.querySelector('nav').style.transform = (y > lastY && y > 80) ? 'translateY(-100%)' : 'translateY(0)';
+  lastY = y;
+});
+</script>
+</body>
+</html>
