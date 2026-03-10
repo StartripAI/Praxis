@@ -1,0 +1,62 @@
+name: Security — Desensitization Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  desensitization-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Check: No brand names"
+        run: |
+          if grep -ri "奈尔宝\|neobio\|superneobio" --include="*.py" --include="*.md" --include="*.toml" --include="*.json" --include="*.yaml" .; then
+            echo "❌ FAIL: Brand names found"
+            exit 1
+          fi
+          echo "✅ PASS: No brand names"
+
+      - name: "Check: No secrets"
+        run: |
+          if grep -ri "7ce08a4b\|KC5BTNXPPW\|neobio-489103" .; then
+            echo "❌ FAIL: Secrets found"
+            exit 1
+          fi
+          echo "✅ PASS: No secrets"
+
+      - name: "Check: No absolute paths"
+        run: |
+          if grep -rn "/Users/" --include="*.py" --include="*.md" .; then
+            echo "❌ FAIL: Absolute paths found"
+            exit 1
+          fi
+          echo "✅ PASS: No absolute paths"
+
+      - name: "Check: No proprietary table names"
+        run: |
+          if grep -ri "fact_dashboard_daily_long\|fact_store_reconciled\|fact_hq_daily_long\|fact_nc_daily" --include="*.py" .; then
+            echo "❌ FAIL: Proprietary table names found"
+            exit 1
+          fi
+          echo "✅ PASS: No proprietary table names"
+
+      - name: "Check: No hardcoded business logic"
+        run: |
+          if grep -ri "HOLIDAY_SIPHON\|RPG_FALLBACK_BAND\|MAIN_ENGINE_MONTHS" --include="*.py" .; then
+            echo "❌ FAIL: Hardcoded business logic found"
+            exit 1
+          fi
+          echo "✅ PASS: No hardcoded business logic"
+
+      - name: "Check: No data files"
+        run: |
+          DATA_FILES=$(find . -name "*.duckdb" -o -name "*.parquet" -o -name "*.xlsx" | head -5)
+          if [ -n "$DATA_FILES" ]; then
+            echo "❌ FAIL: Data files found: $DATA_FILES"
+            exit 1
+          fi
+          echo "✅ PASS: No data files"

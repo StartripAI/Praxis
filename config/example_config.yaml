@@ -1,0 +1,57 @@
+# Praxis — Example Configuration
+# Copy this file to config.yaml and customize for your use case.
+
+# Metrics to forecast (customize per business)
+metrics:
+  - sales
+  - traffic
+  - revenue
+
+# Data source
+data:
+  type: duckdb  # duckdb | csv | bigquery
+  path: ./data/analytics.duckdb
+  # bigquery_project: your-project-id
+  # bigquery_dataset: your_dataset
+
+# Calendar settings
+calendar:
+  country: CN           # ISO country code for holidays
+  school_vacation: true  # Enable school vacation features
+  # custom_events:       # Optional: path to custom events CSV
+  #   - path: ./data/custom_events.csv
+
+# Forecasting
+forecast:
+  horizon_days: 31
+  methods:
+    - baseline   # daytype average + entity adjustment
+    - lgbm       # LightGBM recursive
+  ensemble:
+    enabled: true
+    weight_method: backtest_score  # backtest_score | equal
+
+# Conformal Prediction
+conformal:
+  enabled: true
+  quantiles: [0.10, 0.50, 0.90]
+  calibration_window: 90  # days
+
+# Backtest Governance
+backtest:
+  enabled: true
+  n_origins: 6           # number of rolling origins
+  gate:
+    max_bias: 0.15        # |bias| <= 15%
+    max_wape: 0.20        # WAPE <= 20%
+
+# Growth Decomposition
+growth:
+  yoy_weight: 0.70
+  mom_weight: 0.30
+  shrinkage: bayesian     # bayesian | none
+
+# Output
+output:
+  format: csv             # csv | excel | json
+  path: ./output/
